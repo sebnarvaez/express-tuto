@@ -6,6 +6,9 @@ const app = express()
 // Puedo usar la funcion use para hacer un pre-procesamiento
 // sin importar la URL. Esta funcion o callback que se le pasa
 // a use() se llama Middleware
+// Pueden haber muchos middlewares, y se ejecutaran en orden de
+// aparicion. Asi que si quiero que una ruta no pase por middleware,
+// debo ponerla antes de ese middleware.
 app.use((req, res, next) => {
     console.log(`Pase por use() a traves de la ruta ${req.url} y usando el metodo ${req.method}`);
 
