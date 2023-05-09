@@ -1,7 +1,13 @@
 const { json } = require('body-parser');
 const express = require('express');
+const morgan = require('morgan')
 
 const app = express()
+// Express settings. Siempre antes que los middlewares.
+app.set('appName', 'Express Tuto')
+app.set('puerto', 3000)
+
+app.use(morgan('dev'))
 
 // Puedo usar la funcion use para hacer un pre-procesamiento
 // sin importar la URL. Esta funcion o callback que se le pasa
@@ -18,14 +24,17 @@ app.use((req, res, next) => {
     // respuesta al navegador
     next()
 })
+
 // Get se encarga de las peticiones GET, que se envian automaticamente
 // desde el navegador cuando se visita una URL, y el argumento es lo que
 // viene despues del slash.
+/*
 app.get('/', (req, res) => {
-    res.sendFile('./static/index.html', {
+    res.static('./static/index.html', {
         root: __dirname,
     })
 })
+*/
 
 // Extraer parametros de la URL
 app.get('/hello/:usuario', (req, res) => {
@@ -62,15 +71,17 @@ app.all('/todosreq', (req, res) => {
 
 // Use se encarga de manejar las rutas que no han sido manejadas antes.
 // es decir, la respuesta por defecto cuando no se neuentra la pagina (404)
-app.use((req, res) => {
+//app.use((req, res) => {
     /*
     Debo enviar manualmente el Status 404 para darle al navegador
     informacion sobre el error que esta ocurriendo. De lo contrario,
     se retornara el codigo 200 (todo salio bien).
     */
-    res.status(404).send('No se encontro la pagina');
-})
+//    res.status(404).send('No se encontro la pagina');
+//})
 
 
+app.use('/', express.static(__dirname))
 
-app.listen(3000)
+console.log(`Iniciando ${app.get('appName')} en el puerto ${app.get('puerto')}`)
+app.listen(app.get('puerto'))
